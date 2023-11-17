@@ -1,0 +1,156 @@
+<html>
+<head>
+<title>SecondFragment.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #808080;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+SecondFragment.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.example.mybirthdayapp</span>
+
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import android.content.res.Configuration</span>
+<span class="s1">import androidx.recyclerview.widget.GridLayoutManager</span>
+<span class="s1">import android.util.Log</span>
+<span class="s1">import androidx.fragment.app.Fragment</span>
+<span class="s1">import android.view.LayoutInflater</span>
+<span class="s1">import android.view.Menu</span>
+<span class="s1">import android.view.MenuInflater</span>
+<span class="s1">import android.view.MenuItem</span>
+<span class="s1">import android.view.View</span>
+<span class="s1">import android.view.ViewGroup</span>
+<span class="s1">import androidx.fragment.app.activityViewModels</span>
+<span class="s1">import androidx.navigation.fragment.findNavController</span>
+<span class="s1">import com.example.mybirthdayapp.databinding.FragmentSecondBinding</span>
+<span class="s1">import com.example.mybirthdayapp.models.MyAdapter</span>
+<span class="s1">import com.example.mybirthdayapp.models.PersonViewModel</span>
+<span class="s1">import com.google.android.material.snackbar.Snackbar</span>
+<span class="s1">import com.google.firebase.auth.FirebaseAuth</span>
+
+
+<span class="s0">class </span><span class="s1">SecondFragment : Fragment() {</span>
+
+    <span class="s1">private </span><span class="s0">var </span><span class="s1">_binding: FragmentSecondBinding? = </span><span class="s0">null</span>
+    <span class="s1">private </span><span class="s0">val </span><span class="s1">binding get() = _binding!!</span>
+    <span class="s1">private </span><span class="s0">val </span><span class="s1">personViewModel: PersonViewModel by activityViewModels()</span>
+    <span class="s1">private </span><span class="s0">val </span><span class="s1">auth: FirebaseAuth = FirebaseAuth.getInstance()</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateView(</span>
+        <span class="s1">inflater: LayoutInflater</span><span class="s0">, </span><span class="s1">container: ViewGroup?</span><span class="s0">,</span>
+        <span class="s1">savedInstanceState: Bundle?</span>
+    <span class="s1">): View? {</span>
+        <span class="s1">setHasOptionsMenu(</span><span class="s0">true</span><span class="s1">)</span>
+
+        <span class="s1">_binding = FragmentSecondBinding.inflate(inflater</span><span class="s0">, </span><span class="s1">container</span><span class="s0">, false</span><span class="s1">)</span>
+
+        <span class="s0">return </span><span class="s1">binding.root</span>
+
+    <span class="s1">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onViewCreated(view: View</span><span class="s0">, </span><span class="s1">savedInstanceState: Bundle?) {</span>
+        <span class="s0">super</span><span class="s1">.onViewCreated(view</span><span class="s0">, </span><span class="s1">savedInstanceState)</span>
+
+        <span class="s1">personViewModel.personsLiveData.observe(viewLifecycleOwner) { persons -&gt;</span>
+            <span class="s1">Log.d(</span><span class="s2">&quot;APPLE&quot;</span><span class="s0">, </span><span class="s1">persons.toString())</span>
+
+            <span class="s1">binding.progressbar.visibility = View.GONE</span>
+            <span class="s1">binding.recyclerView.visibility = </span><span class="s0">if </span><span class="s1">(persons == </span><span class="s0">null</span><span class="s1">) View.GONE </span><span class="s0">else </span><span class="s1">View.VISIBLE</span>
+            <span class="s3">// binding.recyclerView.layoutManager = LinearLayoutManager(activity)</span>
+            <span class="s0">if </span><span class="s1">(persons != </span><span class="s0">null</span><span class="s1">) {</span>
+                <span class="s0">val </span><span class="s1">adapter = MyAdapter(persons) { position -&gt;</span>
+                    <span class="s0">val </span><span class="s1">action =</span>
+                        <span class="s1">SecondFragmentDirections.actionSecondFragmentToModifyFragment(position)</span>
+                    <span class="s1">findNavController().navigate(action)</span>
+                <span class="s1">}</span>
+
+                <span class="s0">var </span><span class="s1">columns = </span><span class="s4">2</span>
+                <span class="s0">val </span><span class="s1">currentOrientation = </span><span class="s0">this</span><span class="s1">.resources.configuration.orientation</span>
+                <span class="s0">if </span><span class="s1">(currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {</span>
+                    <span class="s1">columns = </span><span class="s4">4</span>
+
+                <span class="s1">} </span><span class="s0">else if </span><span class="s1">(currentOrientation == Configuration.ORIENTATION_PORTRAIT) {</span>
+                    <span class="s1">columns = </span><span class="s4">2</span>
+                <span class="s1">}</span>
+                <span class="s1">binding.recyclerView.layoutManager = GridLayoutManager(</span><span class="s0">this</span><span class="s1">.context</span><span class="s0">, </span><span class="s1">columns)</span>
+                <span class="s1">binding.recyclerView.adapter = adapter</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+        <span class="s1">personViewModel.errorMassegeLiveData.observe(viewLifecycleOwner) { errorMessage -&gt;</span>
+            <span class="s1">binding.textviewMessage.text = errorMessage</span>
+        <span class="s1">}</span>
+
+        <span class="s1">personViewModel.reload()</span>
+
+        <span class="s1">binding.swiperefresh.setOnRefreshListener {</span>
+            <span class="s1">personViewModel.reload()</span>
+            <span class="s1">binding.swiperefresh.isRefreshing = </span><span class="s0">false</span>
+        <span class="s1">}</span>
+
+
+        <span class="s1">binding.buttonSort.setOnClickListener {</span>
+            <span class="s0">when </span><span class="s1">(binding.SpinnerSorting.selectedItemPosition) {</span>
+                <span class="s4">0 </span><span class="s1">-&gt; personViewModel.sortByName()</span>
+                <span class="s4">1 </span><span class="s1">-&gt; personViewModel.sortByAge()</span>
+                <span class="s4">2 </span><span class="s1">-&gt; personViewModel.sortByBirthday()</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+        <span class="s1">binding.buttonFilterName.setOnClickListener {</span>
+            <span class="s0">val </span><span class="s1">filter = binding.edittextFilterName.text.toString().trim()</span>
+            <span class="s0">if </span><span class="s1">(filter.isBlank()) {</span>
+                <span class="s1">binding.edittextFilterName.error = </span><span class="s2">&quot; No Title&quot;</span>
+                <span class="s0">return</span><span class="s1">@setOnClickListener</span>
+            <span class="s1">}</span>
+            <span class="s1">personViewModel.filterByName(filter)</span>
+
+
+        <span class="s1">}</span>
+        <span class="s1">binding.fab.setOnClickListener { view -&gt;</span>
+            <span class="s1">Snackbar.make(view</span><span class="s0">, </span><span class="s2">&quot;Replace with your own action&quot;</span><span class="s0">, </span><span class="s1">Snackbar.LENGTH_LONG)</span>
+                <span class="s1">.setAction(</span><span class="s2">&quot;Action&quot;</span><span class="s0">, null</span><span class="s1">).show()</span>
+            <span class="s1">findNavController().navigate(R.id.action_SecondFragment_to_addFragment)</span>
+        <span class="s1">}</span>
+
+
+    <span class="s1">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onDestroyView() {</span>
+        <span class="s0">super</span><span class="s1">.onDestroyView()</span>
+        <span class="s1">_binding = </span><span class="s0">null</span>
+    <span class="s1">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateOptionsMenu(menu: Menu</span><span class="s0">, </span><span class="s1">menuInflater: MenuInflater) {</span>
+        <span class="s3">//super.onCreateOptionsMenu(menu, menuInflater)</span>
+        <span class="s1">menuInflater.inflate(R.menu.menu_main</span><span class="s0">, </span><span class="s1">menu)</span>
+    <span class="s1">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onOptionsItemSelected(item: MenuItem): Boolean {</span>
+        <span class="s0">when </span><span class="s1">(item.itemId) {</span>
+            <span class="s1">R.id.action_settings -&gt; {</span>
+                <span class="s1">Snackbar.make(binding.SecondFragment</span><span class="s0">, </span><span class="s2">&quot;Settings..&quot;</span><span class="s0">, </span><span class="s1">Snackbar.LENGTH_LONG).show()</span>
+                <span class="s0">return true</span>
+            <span class="s1">}</span>
+
+            <span class="s1">R.id.action_logout -&gt; {</span>
+                <span class="s1">Snackbar.make(binding.SecondFragment</span><span class="s0">, </span><span class="s2">&quot;Logout..&quot;</span><span class="s0">, </span><span class="s1">Snackbar.LENGTH_LONG).show()</span>
+                <span class="s1">auth.signOut()</span>
+                <span class="s1">findNavController().popBackStack()</span>
+                <span class="s0">return true</span>
+            <span class="s1">}</span>
+
+            <span class="s0">else </span><span class="s1">-&gt; </span><span class="s0">return super</span><span class="s1">.onOptionsItemSelected(item)</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

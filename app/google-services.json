@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "895563324919",
+    "project_id": "johns-a6cc5",
+    "storage_bucket": "johns-a6cc5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895563324919:android:6db7be710e2617a283e2f2",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3lxN-3RbZYKTWWH5RxvNUSh-DCeYyiV4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895563324919:android:aa6108a7cc81c62f83e2f2",
+        "android_client_info": {
+          "package_name": "com.example.mybirthdayapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3lxN-3RbZYKTWWH5RxvNUSh-DCeYyiV4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
